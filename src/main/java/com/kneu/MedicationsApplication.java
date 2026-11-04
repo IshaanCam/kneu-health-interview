@@ -1,4 +1,4 @@
-package com.kneu.medications;
+package com.kneu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

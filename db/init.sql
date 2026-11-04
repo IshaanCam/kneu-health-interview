@@ -4,6 +4,15 @@ CREATE TABLE medications (
     dosage VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE prescriptions (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    time CHAR(5) NOT NULL, 
+    medicine_id BIGINT NOT NULL, 
+    FOREIGN KEY (medicine_id)
+    REFERENCES medications(id)
+);
+
 INSERT INTO medications (id, name, dosage) VALUES
     (1, 'Aspirin',     '100mg'),
     (2, 'Metformin',   '500mg'),
