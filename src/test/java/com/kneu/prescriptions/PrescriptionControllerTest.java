@@ -38,36 +38,15 @@ class PrescriptionControllerTest {
         long m_id_2 = medicationRepository.save(metformin).getId();
 
 
-        long p_id_1 = prescriptionRepository.save(new Prescription("Aspirin", "08:00", aspirin)).getId();
-        long p_id_2 = prescriptionRepository.save(new Prescription("Metformin", "12:00", metformin)).getId();
+        long p_id_1 = prescriptionRepository.save(new Prescription("Aspirin", "08:00", m_id_1)).getId();
+        long p_id_2 = prescriptionRepository.save(new Prescription("Metformin", "12:00", m_id_2)).getId();
 
         mockMvc.perform(get("/prescriptions"))
             .andExpect(status().isOk())
             .andExpect(content().json(String.format("""
                 [
-                    {"id": %d, "name": "Aspirin", "time": "08:00", "medicine":{"id": %d, "name": "Aspirin", "dosage": "100mg"}},
-                    {"id": %d, "name": "Metformin", "time": "12:00", "medicine":{"id": %d, "name": "Metformin", "dosage": "500mg"}}
-                ]
-                """, p_id_1, m_id_1, p_id_2, m_id_2)));
-    }
-
-    @Test
-    void getAllPrescriptionsWithoutName() throws Exception {
-        Medication aspirin = new Medication("Aspirin", "100mg");
-        Medication metformin = new Medication("Metformin", "500mg");
-
-        long m_id_1 = medicationRepository.save(aspirin).getId();
-        long m_id_2 = medicationRepository.save(metformin).getId();
-
-        long p_id_1 = prescriptionRepository.save(new Prescription("08:00", aspirin)).getId();
-        long p_id_2 = prescriptionRepository.save(new Prescription("12:00", metformin)).getId();
-
-        mockMvc.perform(get("/prescriptions"))
-            .andExpect(status().isOk())
-            .andExpect(content().json(String.format("""
-                [
-                    {"id": %d, "name": "Aspirin 100mg", "time": "08:00", "medicine":{"id": %d, "name": "Aspirin", "dosage": "100mg"}},
-                    {"id": %d, "name": "Metformin 500mg", "time": "12:00", "medicine":{"id": %d, "name": "Metformin", "dosage": "500mg"}}
+                    {"id": %d, "name": "Aspirin", "time": "08:00", "medicationId": %d},
+                    {"id": %d, "name": "Metformin", "time": "12:00", "medicationId": %d}
                 ]
                 """, p_id_1, m_id_1, p_id_2, m_id_2)));
     }
@@ -92,6 +71,7 @@ class PrescriptionControllerTest {
                 .andExpect(jsonPath("$.time").value("08:00"));
     }
 
+    @Test
     void createPrescriptionWithoutName() throws Exception {
         Medication aspirin = new Medication("Aspirin", "100mg");
         Long med_id = medicationRepository.save(aspirin).getId();

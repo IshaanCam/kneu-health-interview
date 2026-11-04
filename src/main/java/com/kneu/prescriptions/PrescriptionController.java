@@ -42,7 +42,7 @@ public class PrescriptionController {
         ? req.name()
         : medicine.getName() + " " + medicine.getDosage();
         
-        Prescription saved_prescription = repository.save(new Prescription(label, req.time(), medicine));
+        Prescription saved_prescription = repository.save(new Prescription(label, req.time(), medicine.getId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved_prescription);
     }

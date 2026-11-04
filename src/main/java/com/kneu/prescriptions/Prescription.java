@@ -1,5 +1,4 @@
 package com.kneu.prescriptions;
-import com.kneu.medications.Medication;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +19,7 @@ public class Prescription {
     @ManyToOne 
     @JoinColumn (name = "medicine_id", nullable = false)
 
-    private Medication medicine;
+    private Long medicationId;
 
     private String time;
 
@@ -30,16 +29,10 @@ public class Prescription {
 
     }
 
-    public Prescription(String name, String time, Medication medicine) {
+    public Prescription(String name, String time, Long medicationId) {
         this.name = name;
         this.time = time;
-        this.medicine = medicine;
-    }
-
-    public Prescription(String time, Medication medication) {
-        this.time = time;
-        this.medicine = medication;
-        this.name = String.format("%s %s", this.medicine.getName(), this.medicine.getDosage());
+        this.medicationId = medicationId;
     }
 
     public Long getId() {
@@ -54,8 +47,8 @@ public class Prescription {
         return time;
     }
 
-    public Medication getMedicine() {
-        return medicine;
+    public Long getMedicationId() {
+        return medicationId;
     }
 }
 
