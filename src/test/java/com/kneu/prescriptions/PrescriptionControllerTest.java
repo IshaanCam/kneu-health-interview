@@ -60,15 +60,16 @@ class PrescriptionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(String.format("""
                         {
-                            "name" : "Aspirin"
+                            "name" : "Aspirin",
                             "time" : "08:00",
                             "medicationId": %d
                         }
                     """, med_id)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.medicine.name").value("Aspirin"))
-                .andExpect(jsonPath("$.time").value("08:00"));
+                .andExpect(jsonPath("$.name").value("Aspirin"))
+                .andExpect(jsonPath("$.time").value("08:00"))
+                .andExpect(jsonPath("$.medicationId").isNumber());
     }
 
     @Test
@@ -86,8 +87,9 @@ class PrescriptionControllerTest {
                     """, med_id)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.medicine.name").value("Aspirin 100mg"))
-                .andExpect(jsonPath("$.time").value("08:00"));
+                .andExpect(jsonPath("$.name").value("Aspirin 100mg"))
+                .andExpect(jsonPath("$.time").value("08:00"))
+                .andExpect(jsonPath("$.medicationId").isNumber());
     }
 
     @Test 

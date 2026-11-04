@@ -1,5 +1,6 @@
 package com.kneu.prescriptions;
 
+import com.kneu.medications.Medication;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Prescription {
 
     @ManyToOne 
     @JoinColumn (name = "medicine_id", nullable = false)
+    private Medication medicine;
 
     private Long medicationId;
 
