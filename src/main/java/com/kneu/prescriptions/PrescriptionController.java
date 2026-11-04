@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import jakarta.validation.Valid;
 
 import com.kneu.medications.Medication;
 import com.kneu.medications.MedicationRepository;
@@ -30,12 +33,17 @@ public class PrescriptionController {
     }
 
     @PostMapping("/prescriptions")
-    public ResponseEntity<Prescription> createPrescription(@RequestBody Prescription prescription) {
-        Medication medicine = prescription.getMedicine();
-        if (medicine == null || medicine.getId() == null || medicine_repository.findById(medicine.getId()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        Prescription saved_prescription = repository.save(prescription);
+    public ResponseEntity<Prescription> createPrescription(@Valid @RequestBody CreatePrescriptionRequest req) {
+        Medication medicine = medicine_repository.findById(req.medicationId()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown medication")
+        );
+        
+        String label = (req.name() != null && !req.name().isBlank())
+        ? req.name()
+        : medicine.getName() + " " + medicine.getDosage();
+        
+        Prescription saved_prescription = repository.save(new Prescription(label, req.time(), medicine));
+
         return ResponseEntity.status(HttpStatus.CREATED).body(saved_prescription);
     }
 
